@@ -13,6 +13,8 @@ function string.IsValid(str)
     return str != nil and str != emptyString
 end
 
+local tableConcat = table.concat
+
 ---------------------------------
 -- string.concat
 ---------------------------------
@@ -21,5 +23,5 @@ end
 -- Arg(s):      String(s) - The strings to concatenates together.
 -- Returns:     String - Concatenated string.
 function string.concat(...)
-    return table.concat({...}, emptyString)
+    return tableConcat({...}, emptyString)
 end
