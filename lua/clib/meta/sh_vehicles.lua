@@ -92,12 +92,16 @@ function ENTITY:IsEngineActive()
     if LVS or simfphys then
         if self.LVS then
            return self:GetEngineActive()
-        else
-            return true
+        elseif simfphys.IsCar(self) then
+            return SERVER and self:EngineActive() or true
         end
     end
 
-    return SERVER and self:IsEngineStarted() or true
+    if SERVER then
+        return self:IsEngineStarted()
+    end
+
+    return true
 end
 
 local PLAYER = FindMetaTable("Player")
