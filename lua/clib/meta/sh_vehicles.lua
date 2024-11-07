@@ -85,7 +85,7 @@ end
 -- State:       Shared
 -- Returns:     Bool - True if the vehicle's engine is active (on).
 function ENTITY:IsEngineActive()
-    if !self:IsVehicle() then
+    if !self:IsVehicle() and !self.LVS then
         return false
     end
 
@@ -116,7 +116,7 @@ local PLAYER = FindMetaTable("Player")
 function PLAYER:IsDriver(vehicle)
     -- If no vehicle is provided, default to whatever vehicle the player is in.
     if !vehicle then
-        vehicle = self:GetVehicle()
+        vehicle = CLib.GetVehicle(self:GetVehicle())
     end
 
     -- If we aren't in any vehicle or the provided vehicle is invalid, we are not driving anything.
@@ -125,7 +125,7 @@ function PLAYER:IsDriver(vehicle)
     end
 
     if LVS and IsValid(self:lvsGetVehicle()) then
-        return self == vehicle:GetDriverSeat():GetDriver()
+        return self == vehicle:GetDriver()
     elseif simfphys and IsValid(self:GetSimfphys()) then
         return self:IsDrivingSimfphys()
     elseif (SVMOD and SVMOD:GetAddonState()) and SVMOD:IsVehicle(vehicle) then
