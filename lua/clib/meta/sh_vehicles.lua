@@ -153,14 +153,14 @@ if CLIENT then
         if inVehicle and !hasEntered then
             local vehicle = plyGetVehicle(client)
 
-            hook.Run("PlayerEnteredVehicle", client, vehicle, 1)
+            ProtectedCall(hook.Run, "PlayerEnteredVehicle", client, vehicle, 1)
 
             hasEntered = true
             wasInVehicle, lastVehicle = true, vehicle
         end
 
         if hasEntered and wasInVehicle and !inVehicle then
-            hook.Run("PlayerLeaveVehicle", client, lastVehicle)
+            ProtectedCall(hook.Run, "PlayerLeaveVehicle", client, lastVehicle)
 
             hasEntered = false
             wasInVehicle, lastVehicle = false, nil
