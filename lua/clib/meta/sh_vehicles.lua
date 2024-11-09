@@ -98,7 +98,11 @@ function ENTITY:IsEngineActive()
     end
 
     if SERVER then
-        return self:IsEngineStarted()
+        local vIsEngineStarted = self.IsEngineStarted
+
+        if isfunction(vIsEngineStarted) then
+            return vIsEngineStarted(self)
+        end
     end
 
     return true
