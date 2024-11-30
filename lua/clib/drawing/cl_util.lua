@@ -21,7 +21,9 @@ end
 local shouldHideHUD = false
 
 hook.Add("HUDShouldDraw", "CLib.Util.HideHUD", function()
-    return !shouldHideHUD
+    if shouldHideHUD then
+        return false
+    end
 end)
 
 function CLib.SetHideHUD(bool)
