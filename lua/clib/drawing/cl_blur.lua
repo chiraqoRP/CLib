@@ -2,8 +2,7 @@ local PANEL = FindMetaTable("Panel")
 local blurMat = Material("pp/blurscreen")
 
 function PANEL:BlurBackground(dark)
-    if !dark then dark = 150 end
-    if !self.BlurDynamic then self.BlurDynamic = 0 end
+    self.BlurDynamic = self.BlurDynamic or 0
 
     local layers, density = 1, 1
     local x, y = self:LocalToScreen(0, 0)
@@ -19,15 +18,14 @@ function PANEL:BlurBackground(dark)
         surface.DrawTexturedRect(-x, -y, ScrW(), ScrH())
     end
 
-    surface.SetDrawColor(0, 0, 0, dark * self.BlurDynamic)
+    surface.SetDrawColor(0, 0, 0, (dark or 150) * self.BlurDynamic)
     surface.DrawRect(0, 0, self:GetSize())
 
     self.BlurDynamic = math.Clamp(self.BlurDynamic + (1 / frameTime) * 7, 0, 1)
 end
 
 function PANEL:BlurSurroundings(dark)
-    if !dark then dark = 150 end
-    if !self.BlurDynamic then self.BlurDynamic = 0 end
+    self.BlurDynamic = self.BlurDynamic or 0
 
     local layers, density = 1, 1
     local x, y = 0, 0
@@ -45,7 +43,7 @@ function PANEL:BlurSurroundings(dark)
         surface.DrawTexturedRect(-x, -y, scrW, scrH)
     end
 
-    surface.SetDrawColor(0, 0, 0, dark * self.BlurDynamic)
+    surface.SetDrawColor(0, 0, 0, (dark or 150) * self.BlurDynamic)
     surface.DrawRect(0, 0, scrW, scrH)
     DisableClipping(false)
 
