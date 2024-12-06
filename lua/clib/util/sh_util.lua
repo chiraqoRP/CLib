@@ -25,18 +25,3 @@ local tableConcat = table.concat
 function string.concat(...)
     return tableConcat({...}, emptyString)
 end
-
-if CLIENT then
-    -- Hide HUD system
-    local shouldHideHUD = false
-
-    hook.Add("HUDShouldDraw", "CLib.Util.HideHUD", function()
-        if shouldHideHUD then
-            return false
-        end
-    end)
-
-    function CLib.SetHideHUD(bool)
-        shouldHideHUD = bool
-    end
-end
