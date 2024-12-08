@@ -20,28 +20,32 @@ function CLib.GetVehicle(vehicle)
         parent = vehicle
     end
 
-    local basesInstalled = LVS or simfphys or (SVMOD and SVMOD:GetAddonState())
+    local basesInstalled = Glide or LVS or simfphys or (SVMOD and SVMOD:GetAddonState())
 
     if basesInstalled then
-        if parent.LVS and IsValid(parent) then
+        if IsValid(parent) and parent.IsGlideVehicle then
+            return parent
+        elseif IsValid(parent) and parent.LVS then
            return parent
-        elseif parent.IsSimfphyscar and IsValid(parent) then
+        elseif IsValid(parent) and parent.IsSimfphyscar then
            return parent
         elseif SVMOD and SVMOD:IsVehicle(vehicle) then
             return parent
         end
     end
-        
+
     return parent
 end
 
 local function GetCustomPassengers(vehicle)
-    if !IsValid(vehicle) or !vehicle.LVS and !vehicle:IsSimfphyscar() then
+    if !IsValid(vehicle) or !vehicle.IsGlideVehicle or !vehicle.LVS and !vehicle:IsSimfphyscar() then
         return
     end
 
     local passengers = {}
-    local seats = (vehicle.LVS and vehicle:GetPassengerSeats()) or vehicle:GetChildren()
+    local seats = vehicle.IsGlideVehicle and vehicle.seats
+        or vehicle.LVS and vehicle:GetPassengerSeats()
+        or vehicle:GetChildren()
 
     for i = 1, #seats do
         local seat = seats[i]
@@ -67,9 +71,9 @@ local ENTITY = FindMetaTable("Entity")
 -- Returns:     Table - Table containing all the passengers.
 function ENTITY:GetPassengers()
     local parent = self:GetParent() or self
-    local isLVSorSimfphys = parent.LVS or (simfphys and parent.IsSimfphyscar)
+    local isCustom = parent.IsGlideVehicle or parent.LVS or parent.IsSimfphyscar
 
-    if isLVSorSimfphys then
+    if isCustom then
         return GetCustomPassengers(parent)
     elseif SVMOD and SVMOD:GetAddonState() and SVMOD:IsVehicle(parent) then
         return parent:SV_GetAllPlayers()
@@ -85,16 +89,16 @@ end
 -- State:       Shared
 -- Returns:     Bool - True if the vehicle's engine is active (on).
 function ENTITY:IsEngineActive()
-    if !self:IsVehicle() and !self.LVS then
+    if !self:IsVehicle() and !self.IsGlideVehicle and !self.LVS then
         return false
     end
 
-    if LVS or simfphys then
-        if self.LVS then
-           return self:GetEngineActive()
-        elseif simfphys.IsCar(self) then
-            return SERVER and self:EngineActive() or true
-        end
+    if self.IsGlideVehicle then
+        return self:GetEngineState() == 2
+    elseif self.LVS then
+        return self:GetEngineActive()
+    elseif simfphys.IsCar(self) then
+        return SERVER and self:EngineActive() or true
     end
 
     if SERVER then
@@ -128,7 +132,9 @@ function PLAYER:IsDriver(vehicle)
         return false
     end
 
-    if LVS and IsValid(self:lvsGetVehicle()) then
+    if Glide and IsValid(self:GlideGetVehicle()) then
+        return self == vehicle:GetDriver()
+    elseif LVS and IsValid(self:lvsGetVehicle()) then
         return self == vehicle:GetDriver()
     elseif simfphys and IsValid(self:GetSimfphys()) then
         return self:IsDrivingSimfphys()
