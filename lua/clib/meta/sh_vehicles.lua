@@ -151,7 +151,7 @@ if CLIENT then
     local wasInVehicle, lastVehicle = false, nil
     local plyInVehicle, plyGetVehicle = PLAYER.InVehicle, PLAYER.GetVehicle
 
-    hook.Add("Think", "CLib.Meta.VehicleSwitch", function()
+    hook.Add("Tick", "CLib.VehicleSwitch", function()
         if !client then
             client = LocalPlayer()
 
