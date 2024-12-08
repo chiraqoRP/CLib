@@ -1,7 +1,6 @@
 CLib = CLib or {}
 
 -- CSLua
-AddCSLuaFile("clib/meta/sh_entities.lua")
 AddCSLuaFile("clib/meta/sh_vehicles.lua")
 AddCSLuaFile("clib/util/sh_util.lua")
 
@@ -11,7 +10,6 @@ if SERVER then
 end
 
 -- Includes
-include("clib/meta/sh_entities.lua")
 include("clib/meta/sh_vehicles.lua")
 include("clib/util/sh_util.lua")
 
