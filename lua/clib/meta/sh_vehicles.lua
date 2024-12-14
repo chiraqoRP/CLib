@@ -144,36 +144,3 @@ function PLAYER:IsDriver(vehicle)
 
     return true
 end
-
-if CLIENT then
-    local client = nil
-    local hasEntered = false
-    local wasInVehicle, lastVehicle = false, nil
-    local plyInVehicle, plyGetVehicle = PLAYER.InVehicle, PLAYER.GetVehicle
-
-    hook.Add("Tick", "CLib.VehicleSwitch", function()
-        if !client then
-            client = LocalPlayer()
-
-            return
-        end
-
-        local inVehicle = plyInVehicle(client)
-
-        if inVehicle and !hasEntered then
-            local vehicle = plyGetVehicle(client)
-
-            ProtectedCall(hook.Run, "PlayerEnteredVehicle", client, vehicle, 1)
-
-            hasEntered = true
-            wasInVehicle, lastVehicle = true, vehicle
-        end
-
-        if hasEntered and wasInVehicle and !inVehicle then
-            ProtectedCall(hook.Run, "PlayerLeaveVehicle", client, lastVehicle)
-
-            hasEntered = false
-            wasInVehicle, lastVehicle = false, nil
-        end
-    end)
-end
