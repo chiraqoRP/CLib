@@ -38,7 +38,7 @@ function CLib.GetVehicle(vehicle)
 end
 
 local function GetCustomPassengers(vehicle)
-    if !IsValid(vehicle) or !vehicle.IsGlideVehicle or !vehicle.LVS and !vehicle:IsSimfphyscar() then
+    if !IsValid(vehicle) or !vehicle.IsGlideVehicle or !vehicle.LVS and !vehicle.IsSimfphyscar then
         return
     end
 
