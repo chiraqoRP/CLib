@@ -6,8 +6,14 @@
 -- Arg One:     Entity - The vehicle to get the "true" entity from.
 -- Returns:     Entity - The "true" vehicle entity.
 function CLib.GetVehicle(vehicle)
-    if CLIENT then
-        vehicle = vehicle or LocalPlayer():GetVehicle()
+    if CLIENT and !vehicle then
+        local client = LocalPlayer()
+
+        if !IsValid(client) or client == NULL then
+            return
+        end
+
+        vehicle = client:GetVehicle()
     end
 
     if !IsValid(vehicle) then
