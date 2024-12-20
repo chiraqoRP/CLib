@@ -130,8 +130,10 @@ local PLAYER = FindMetaTable("Player")
 function PLAYER:IsDriver(vehicle)
     -- If no vehicle is provided, default to whatever vehicle the player is in.
     if !vehicle then
-        vehicle = CLib.GetVehicle(self:GetVehicle())
+        vehicle = self:GetVehicle()
     end
+
+   vehicle = CLib.GetVehicle(vehicle)
 
     -- If we aren't in any vehicle or the provided vehicle is invalid, we are not driving anything.
     if !IsValid(vehicle) then
@@ -143,7 +145,7 @@ function PLAYER:IsDriver(vehicle)
     elseif LVS and IsValid(self:lvsGetVehicle()) then
         return self == vehicle:GetDriver()
     elseif simfphys and IsValid(self:GetSimfphys()) then
-        return self:IsDrivingSimfphys()
+        return self:GetSimfphys() == vehicle
     elseif (SVMOD and SVMOD:GetAddonState()) and SVMOD:IsVehicle(vehicle) then
         return self == vehicle:SV_GetDriverSeat():GetDriver()
     end
