@@ -103,7 +103,7 @@ function ENTITY:IsEngineActive()
         return self:GetEngineState() == 2
     elseif self.LVS then
         return self:GetEngineActive()
-    elseif simfphys.IsCar(self) then
+    elseif simfphys and simfphys.IsCar(self) then
         return SERVER and self:EngineActive() or true
     end
 
