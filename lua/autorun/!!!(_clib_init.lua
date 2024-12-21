@@ -3,6 +3,7 @@ CLib = CLib or {}
 -- CSLua
 AddCSLuaFile("clib/meta/sh_vehicles.lua")
 AddCSLuaFile("clib/util/sh_util.lua")
+AddCSLuaFile("circles.lua")
 
 -- Includes
 include("clib/meta/sh_vehicles.lua")
