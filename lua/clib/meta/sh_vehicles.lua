@@ -140,8 +140,16 @@ function PLAYER:IsDriver(vehicle)
         return false
     end
 
-    if Glide and IsValid(self:GlideGetVehicle()) then
-        return self == vehicle:GetDriver()
+    -- WORKAROUND: PLAYER:GlideGetVehicle uses a networked var which is delayed.
+    -- Same with GLIDE:GetDriver().
+    if Glide and vehicle.IsGlideVehicle then
+        local driverSeat = vehicle.seats[1]
+
+        if !IsValid(driverSeat) or driverSeat == NULL then
+            return false
+        end
+
+        return self == driverSeat:GetDriver()
     elseif LVS and IsValid(self:lvsGetVehicle()) then
         return self == vehicle:GetDriver()
     elseif simfphys and IsValid(self:GetSimfphys()) then
