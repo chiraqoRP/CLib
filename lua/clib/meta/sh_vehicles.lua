@@ -151,9 +151,9 @@ function PLAYER:IsDriver(vehicle)
 
         return self == driverSeat:GetDriver()
     elseif LVS and IsValid(self:lvsGetVehicle()) then
-        return self == vehicle:GetDriver()
+        return vehicle == self:lvsGetVehicle()
     elseif simfphys and IsValid(self:GetSimfphys()) then
-        return self:GetSimfphys() == vehicle
+        return vehicle == self:GetSimfphys()
     elseif (SVMOD and SVMOD:GetAddonState()) and SVMOD:IsVehicle(vehicle) then
         return self == vehicle:SV_GetDriverSeat():GetDriver()
     end
