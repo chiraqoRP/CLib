@@ -134,9 +134,11 @@ local PLAYER = FindMetaTable("Player")
 -- Arg One:     Entity - The vehicle to check.
 -- Returns:     Bool - True if the player is the driver.
 function PLAYER:IsDriver(vehicle)
+    local seat = self:GetVehicle()
+
     -- If no vehicle is provided, default to whatever vehicle the player is in.
     if !vehicle then
-        vehicle = self:GetVehicle()
+        vehicle = seat
     end
 
    vehicle = CLib.GetVehicle(vehicle)
@@ -155,13 +157,17 @@ function PLAYER:IsDriver(vehicle)
             return false
         end
 
-        return self == driverSeat:GetDriver()
+        return seat == driverSeat
     elseif LVS and IsValid(self:lvsGetVehicle()) then
-        return vehicle == self:lvsGetVehicle()
+        local lvsVeh = self:lvsGetVehicle()
+
+        return seat == lvsVeh:GetDriverSeat()
     elseif simfphys and IsValid(self:GetSimfphys()) then
-        return vehicle == self:GetSimfphys()
+        local simfVeh = self:GetSimfphys()
+
+        return seat == simfVeh:GetDriverSeat()
     elseif (SVMOD and SVMOD:GetAddonState()) and SVMOD:IsVehicle(vehicle) then
-        return self == vehicle:SV_GetDriverSeat():GetDriver()
+        return seat == vehicle:SV_GetDriverSeat()
     end
 
     return true
