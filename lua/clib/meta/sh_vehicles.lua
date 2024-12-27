@@ -95,7 +95,7 @@ end
 -- State:       Shared
 -- Returns:     Bool - True if the vehicle's engine is active (on).
 function ENTITY:IsEngineActive()
-    if !self:IsVehicle() and !self.IsGlideVehicle and !self.LVS then
+    if !self:IsVehicle() and !self.LVS then
         return false
     end
 
