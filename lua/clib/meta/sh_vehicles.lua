@@ -102,8 +102,8 @@ function ENTITY:IsEngineActive()
     if self.IsGlideVehicle then
         local gType = self.VehicleType
 
-        if gType == Glide.VEHICLE_TYPE.HELICOPTER then
-            return self:GetEngineState() == 1
+        if gType == Glide.VEHICLE_TYPE.HELICOPTER or gType == Glide.VEHICLE_TYPE.PLANE then
+            return self:GetEngineState() >= 1
         end
 
         return self:GetEngineState() == 2
